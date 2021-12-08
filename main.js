@@ -4,13 +4,22 @@ var apiDate = [];
 var apiWeather = [];
 var apiTempMax = [];
 var apiTempMin = [];
+var apiDate = [];
+var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+var today = new Date();
+apiDate[0] = "Today";
+apiDate[1] = "Tomorrow";
 
-for(var i = 0; i<7; i++){
-    theClass = `.day${i}`;
-    day[i] = document.querySelector(theClass)
+for(var i = 2; i < 7; i++){
+    apiDate[i] = new Date(today.getFullYear(), today.getMonth(), today.getDate()+i).toLocaleDateString("en-US", options);
 }
 
-button.addEventListener('click', function(){
+for(var i = 0; i<7; i++){
+    day[i] = document.querySelector(`.day${i}`);
+}
+
+
+function loadMe() {
     fetch('https://www.7timer.info/bin/civillight.php?lon=-79.132&lat=42.296320&ac=0&unit=metric&output=json&tzshift=0')
     .then(response => response.json())
     .then(data => {
@@ -21,14 +30,14 @@ button.addEventListener('click', function(){
             apiWeather[i] = data['dataseries'][i]['weather'];
             apiTempMin[i] = data['dataseries'][i]['temp2m']['min'];
             apiTempMax[i] = data['dataseries'][i]['temp2m']['max'];
-            apiDate[i] = data['dataseries'][i]['date'];
             //pretty up data
             if(apiWeather[i] == 'pcloudy'){
                 apiWeather[i] = 'partially cloudy';
             }
-            
+            apiTempMin[i] = ((apiTempMin[i] * 1.8) + 32)
+            apiTempMax[i] = ((apiTempMax[i] * 1.8) + 32)
             //appendData
-            day[i].innerHTML = apiWeather[i];
+            day[i].innerHTML = `${apiDate[i]}<br />${apiWeather[i]}, low of ${apiTempMin[i]}°F, high of ${apiTempMax[i]}°F.<br><br>`;
         }
 
         console.log(apiWeather);
@@ -36,50 +45,4 @@ button.addEventListener('click', function(){
         console.log(apiTempMax);
         console.log(apiDate);
     })
-})
-
-// async function fetchPosts() {
-//     try{
-//     const response = await fetch('https://www.7timer.info/bin/civillight.php?lon=-79.132&lat=42.296320&ac=0&unit=metric&output=json&tzshift=0');
-//     console.log(response);
-//     if(!response.ok) {
-//         throw new Error(`Failed to fetch posts: ${response.status}`)
-//     }
-    
-//     return await response.json();
-// } catch(e) {
-//     console.log(e);
-// }
-// }
-
-// async function fetchPosts(){
-//     let data = await fetch('https://www.7timer.info/bin/civillight.php?lon=-79.132&lat=42.296320&ac=0&unit=metric&output=json&tzshift=0');
-//     let main = await data.json();
-//     console.log(main);
-// }
-
-
-// function listsWeather(postContainerElementId) {
-//     const postContainerElement = document.getElementById(postContainerElementId);
-
-//     if (!postContainerElement) {
-//         return;
-//     }
-
-//     fetchPosts()
-//         .then(posts => {
-//             if(!posts) { 
-//                 postContainerElement.innerHTML = 'No Posts';
-//                 return;
-//             }
-
-//             for(const posts of posts) {
-//                 postContainerElement.appendChild(postElement(post));
-//                 console.log(post);
-//             }
-
-//         })
-//         .catch(e => {
-//         console.log(e);
-//     });
-// }
+}
