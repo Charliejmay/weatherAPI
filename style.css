@@ -3,23 +3,25 @@ body {
     padding: 0;
 }
 
-#post-section {
-    background-color: rgb(16, 15, 15);
-    color: #bcbcbc;
+.centerMe {
+    color: #f3f0f0;
     padding: 24px;
 }
 
-h3 {
-    font-size: 24px;
+.makeMeFull {
+    width: 100%;
+    height: 100vh;
+    background-color: rgb(6, 9, 34);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+p {
+    font-size: 1.2em;
 }
 
 #post-items-container h3 {
     margin: 6px;
     padding: 6px;
-}
-
-a {
-    text-decoration: none;
-    padding: 6px;
-    color: rgb(38, 132, 219);
 }
